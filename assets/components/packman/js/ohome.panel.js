@@ -1,4 +1,3 @@
-
 TP.panel.Home = function(config) {
     config = config || {};
     Ext.apply(config,{
@@ -20,7 +19,6 @@ TP.panel.Home = function(config) {
             xtype: 'modx-tabs'
             ,border: true
             ,defaults: { border: false ,autoHeight: true }
-			,id: 'tp-home-tab'
             ,items: [{
                 title: _('packman.package')
                 ,draggable: false
@@ -137,103 +135,24 @@ TP.panel.Home = function(config) {
                     ,id: 'tp-grid-directories'
                     ,preventRender: true
                 }]
-            }, {
-                title: _('packman.cmpmenu')
-                ,draggable: false
-                ,layout: 'form'
-                ,labelWidth: 200
-                ,bodyStyle: 'padding: 15px;'
-                ,items: [{
-                    html: _('packman.cmpmenu_msg')
-                    ,border: false
-                },{
-            		xtype: 'checkbox'
-            		,fieldLabel: _('packman.cmpmenu_include')
-					,description: _('packman.cmpmenu_include_desc')
-            		,name: 'cmpmenu-include'
-					,id: 'tp-cmpmenu-include'
-            		,anchor: '100%'
-                    ,listeners: {
-                        'check': { fn: this.menuincludeFieldMsg, scope: this }
-                    }
-            	}, {				
-                    xtype: 'textfield'
-                    ,fieldLabel: _('packman.cmpmenu_name')
-                    ,description: _('packman.cmpmenu_name_desc')
-                    ,name: 'cmpmenu-name'
-                    ,id: 'tp-cmpmenu-name'
-                    ,value: ''
-                },{
-                    xtype: 'textfield'
-                    ,name: 'cmpmenu-desc'
-					,id: 'tp-cmpmenu-desc'
-                    ,fieldLabel: _('packman.cmpmenu_desc')
-                    ,description: _('packman.cmpmenu_desc_desc')
-                    ,value: ''
-                },{
-                    xtype: 'textfield'
-                    ,name: 'cmpmenu-action'
-					,id: 'tp-cmpmenu-action'					
-                    ,fieldLabel: _('packman.cmpmenu_action')
-                    ,description: _('packman.cmpmenu_action_desc')
-                    ,value: ''
-                },{
-                    xtype: 'textfield'
-                    ,name: 'cmpmenu-params'
-					,id: 'tp-cmpmenu-params'					
-                    ,fieldLabel: _('packman.cmpmenu_params')
-                    ,description: _('packman.cmpmenu_params_desc')
-                    ,value: ''
-                }]
-            },{
-                title: _('packman.systemsettings')
-                ,bodyStyle: 'padding: 15px;'
-                ,items: [{
-                    html: _('packman.systemsettings.intro_msg')
-                    ,border: false
-                },{
-                    xtype: 'hidden'
-                    ,name: 'sscategory'
-                    ,id: 'tp-sscategory-name'
-					,disabled: true
-                    ,value: _('packman.mypackage')
-                },{
-                    xtype: 'tp-grid-systemsettings'
-                    ,id: 'tp-grid-systemsettings'
-	            }]
-				,listeners: {
-					'activate': {fn:this.sscheck,scope:TP}				
-				}
             }]
         }]
         ,listeners: {
-			'afterrender': {fn:this.setup,scope:this}
-            ,'beforeSubmit': {fn:this.beforeSubmit,scope:this}
+            'beforeSubmit': {fn:this.beforeSubmit,scope:this}
             ,'success': {fn:this.success,scope:this}
         }
     });
     TP.panel.Home.superclass.constructor.call(this,config);
 };
 Ext.extend(TP.panel.Home,MODx.FormPanel,{
-    setup: function(o) {
-		var f = Ext.getCmp('tp-cmpmenu-include');
-		this.menuincludeFieldMsg(f,f.getValue());
-	}
-	,beforeSubmit: function(o) {
-		// MJB - create array of selected systemsettings
-		var arrayList=[];
-		selected = Ext.getCmp('tp-grid-systemsettings').getSelectionModel().getSelections();
-		Ext.each(selected, function (item) {
-			arrayList.push(item.data);                    
-		});
+    beforeSubmit: function(o) {
         Ext.apply(o.form.baseParams,{
             templates: Ext.getCmp('tp-grid-templates').encode()
             ,chunks: Ext.getCmp('tp-grid-chunks').encode()
             ,snippets: Ext.getCmp('tp-grid-snippets').encode()
             ,plugins: Ext.getCmp('tp-grid-plugins').encode()
             ,packages: Ext.getCmp('tp-grid-packages').encode()
-			,directories: Ext.getCmp('tp-grid-directories').encode()
-			,systemsettings: Ext.encode(arrayList)	// MJB - only need selected
+            ,directories: Ext.getCmp('tp-grid-directories').encode()
         });
     }
     ,success: function(o) {
@@ -247,46 +166,9 @@ Ext.extend(TP.panel.Home,MODx.FormPanel,{
             Ext.getCmp('tp-grid-plugins').getStore().commitChanges();
             Ext.getCmp('tp-grid-packages').getStore().commitChanges();
             Ext.getCmp('tp-grid-directories').getStore().commitChanges();
-            Ext.getCmp('tp-grid-systemsettings').getStore().commitChanges();
-			
+            
             location.href = TP.config.connector_url+'?action=build&download='+name+'&HTTP_MODAUTH='+MODx.siteId;
         }
     }
-	,menuincludeFieldMsg: function (field, checked) {
-        var valueField1 = Ext.getCmp('tp-cmpmenu-name');
-		var valueField2 = Ext.getCmp('tp-cmpmenu-desc');
-		var valueField3 = Ext.getCmp('tp-cmpmenu-action');
-		var valueField4 = Ext.getCmp('tp-cmpmenu-params');
-        if (checked) {
-            valueField1.show();
-			valueField2.show();
-            valueField3.show();
-            valueField4.show();				
-        } else {
-            valueField1.hide();
-            valueField2.hide();			
-            valueField3.hide();	
-            valueField4.hide();				
-        }
-    }
-	,sscheck: function(o) {
-		var c = Ext.getCmp('tp-category-name').getValue();
-		if (c == "") c = Ext.getCmp('tp-category-name').setValue(_('packman.mypackage'));
-		var ss = Ext.getCmp('tp-sscategory-name').getValue();
-		if (ss != c) {
-			// reload system settings grid for active category
-			Ext.getCmp('tp-grid-systemsettings').changess();
-			Ext.getCmp('tp-sscategory-name').setValue(c);
-		}
-		else {
-			// check if store empty & clear select column
-			var recLen = Ext.getCmp('tp-grid-systemsettings').store.getRange().length;
-			if (recLen == 0) {
-				var view   = Ext.getCmp('tp-grid-systemsettings').getView();
-				var chkdiv = Ext.fly(view.innerHd).child(".x-grid3-hd-checker")
-				chkdiv.removeClass("x-grid3-hd-checker-on");
-			}   		
-		}
-	}
 });
 Ext.reg('tp-panel-home',TP.panel.Home);

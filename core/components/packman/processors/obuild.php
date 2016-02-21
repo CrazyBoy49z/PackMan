@@ -54,13 +54,6 @@ if (empty($_POST['category'])) $modx->error->addField('category',$modx->lexicon(
 if (empty($_POST['version'])) $modx->error->addField('version',$modx->lexicon('packman.version_err_nf'));
 if (empty($_POST['release'])) $modx->error->addField('release',$modx->lexicon('packman.release_err_nf'));
 
-// MJB
-$incmenu = (isset($_POST['cmpmenu-include'])) ? $_POST['cmpmenu-include'] : 0;
-if ($incmenu) {
-	if (empty($_POST['cmpmenu-name'])) $modx->error->addField('cmpmenu-name',$modx->lexicon('packman.cmpmenu_name_err'));
-	if (empty($_POST['cmpmenu-action'])) $modx->error->addField('cmpmenu-action',$modx->lexicon('packman.cmpmenu_action_err'));
-}
-
 /* if any errors, return and dont proceed */
 if ($modx->error->hasError()) {
     return $modx->error->failure();
@@ -323,6 +316,7 @@ if (!empty($directories)) {
 }
 
 
+
 /* create dynamic TemplateVarTemplate resolver */
 if (!empty($tvMap)) {
     $tvp = var_export($tvMap,true);
@@ -338,6 +332,7 @@ if (!empty($tvMap)) {
 
 /* add category vehicle to build */
 $builder->putVehicle($vehicle);
+
 
 
 /* add in packages */
@@ -414,84 +409,6 @@ if (!empty($packageList)) {
         $builder->putVehicle($vehicle);
     }
 }
-
-
-/**
- * CMP MENU
- */
-if ($incmenu) {
-	
-	$menukey = (isset($_POST['cmpmenu-name'])) ? $_POST['cmpmenu-name'] : "";
-	$menudesc = (isset($_POST['cmpmenu-desc'])) ? $_POST['cmpmenu-desc'] : "";
-	$menuaction = (isset($_POST['cmpmenu-action'])) ? $_POST['cmpmenu-action'] : "";
-	$menuparams = (isset($_POST['cmpmenu-params'])) ? $_POST['cmpmenu-params'] : "";
-	$menu = $modx->newObject('modMenu');
-	$menu->fromArray(array(
-		'text' => $menukey,
-		'parent' => 'components',
-		'action' => $menuaction,
-		'description' => $menudesc,
-		'icon' => 'images/icons/plugin.gif',
-		'menuindex' => 0,
-		'params' => $menuparams,
-		'handler' => '',
-		'permissions' => $name_lower,
-		'namespace' => $name_lower,
-			), '', true, true);
-	if (empty($menu)) {
-		$modx->log(modX::LOG_LEVEL_ERROR, 'Could not package in menu.');
-	} else {
-		$modx->log(modX::LOG_LEVEL_INFO, 'Packaging in menu...');
-		$menuVehicle = $builder->createVehicle($menu, array(
-			xPDOTransport::PRESERVE_KEYS => true,
-			xPDOTransport::UPDATE_OBJECT => true,
-			xPDOTransport::UNIQUE_KEY => 'text',
-		));
-		$modx->log(modX::LOG_LEVEL_INFO, 'Adding in Menu (2.3+) done.');
-		$builder->putVehicle($menuVehicle);
-		unset($menuVehicle, $menu);
-	}
-}
-
-
-/**
- * System Settings - MJB
- */
-//$settings = include $sources['data'].'transport.settings.php';
-$settings = array();
-
-/* get System Settings */
-$ssList = $modx->fromJSON($_POST['systemsettings']);
-if (!empty($ssList)) {
-	foreach ($ssList as $ssData) {
-        if (empty($ssData['key'])) continue;
-		$ss = array();
-		$key = $ssData['key'];
-		$ss['key'] = $key;
-		$ss['xtype'] = $ssData['xtype'];
-		$ss['value'] = $ssData['value'];
-		$ss['namespace'] = $name_lower;
-		$ss['area'] = $ssData['area'];
-		if (empty($ss)) continue;
-		$settings[$key]= $modx->newObject('modSystemSetting');
-        $settings[$key]->fromArray($ss,'',true,true);
-    }
-    if (empty($settings)) {
-        return $modx->error->failure('Error packaging System Settings!');
-    }
-}
-
-$attributes= array(
-    xPDOTransport::UNIQUE_KEY => 'key',
-    xPDOTransport::PRESERVE_KEYS => true,
-    xPDOTransport::UPDATE_OBJECT => false,
-);
-foreach ($settings as $setting) {
-    $vehicle = $builder->createVehicle($setting,$attributes);
-    $builder->putVehicle($vehicle);
-}
-unset($settings,$setting,$attributes);
-
 
 /* now pack in the license file, readme and setup options */
 $packageAttributes = array();

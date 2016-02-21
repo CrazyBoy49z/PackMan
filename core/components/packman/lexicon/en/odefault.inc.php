@@ -39,25 +39,6 @@ $_lang['packman.chunk_remove'] = 'Remove Chunk';
 $_lang['packman.chunk_remove_confirm'] = 'Are you sure you want to remove this Chunk?';
 $_lang['packman.chunks'] = 'Chunks';
 $_lang['packman.chunks.intro_msg'] = '<p>Please select any Chunks you would like to add to the package.</p>';
-
-// MJB
-$_lang['packman.cmpmenu'] = 'CMP Menu';
-$_lang['packman.cmpmenu_msg'] = '<p>If creating a Custom Manager Page (CMP) then enter options to include a menu in this Transport Package.  The menu parent will default to Extras</p>';
-$_lang['packman.cmpmenu_include'] = 'Include a Menu?';
-$_lang['packman.cmpmenu_include_desc'] = 'Check this if you want to include a menu in this Transport Package.';
-$_lang['packman.cmpmenu_name'] = 'Menu Key';
-$_lang['packman.cmpmenu_name_desc'] = 'The text, or lexicon key, that will be used for rendering the title text of this page in the menu.';
-$_lang['packman.cmpmenu_name_err'] = 'Please specify a Menu Key for the CMP Menu';
-$_lang['packman.cmpmenu_desc'] = 'Menu Description';
-$_lang['packman.cmpmenu_desc_desc'] = 'The text, or lexicon key, that will be used for rendering the description text of this page in the menu.';
-$_lang['packman.cmpmenu_action'] = 'Action';
-$_lang['packman.cmpmenu_action_desc'] = 'The controller path to use for this menu item. The path to the controller is built by prefixing the Namespace path, controllers, and manager theme with this value. (Ex: user/update for core Namespace goes to [core_namespace_path]controllers/[mgr_theme]/user/update.class.php )';
-$_lang['packman.cmpmenu_action_err'] = 'Please specify an Action for the CMP Menu';
-$_lang['packman.cmpmenu_params'] = 'Parameters';
-$_lang['packman.cmpmenu_params_desc'] = 'Any request parameters you want appended to the result URL when clicking this menu. (Ex: &expire=1)';
-$_lang['packman.cmpmenu_params_err'] = 'Please specify an Action for the CMP Menu';
-
-
 $_lang['packman.core_path'] = 'Core Path';
 $_lang['packman.core_path_desc'] = 'The directory that this Snippet hosts its core files in. If it is not found, it will be ignored.';
 $_lang['packman.create_new...'] = 'Create New Profile from this...';
@@ -123,16 +104,6 @@ $_lang['packman.snippet_remove_confirm'] = 'Are you sure you want to remove this
 $_lang['packman.snippets'] = 'Snippets';
 $_lang['packman.snippets_custom'] = 'Custom Snippets';
 $_lang['packman.snippets.intro_msg'] = '<p>Please select Snippets and any files associated with them. <b>Note, you should not use this for Packages downloaded via Package Management.</b> You should use the Packages tab for those.</p>';
-
-// MJB
-$_lang['packman.systemsettings'] = 'System Settings';
-$_lang['packman.systemsettings.intro_msg'] = '<p>Please select the System Settings to be included in this Package.</p><br>';
-$_lang['packman.systemsetting_name'] = 'Name';
-$_lang['packman.systemsetting_key'] = 'Key';
-$_lang['packman.systemsetting_value'] = 'Value';
-$_lang['packman.systemsetting_view'] = 'View';
-
-
 $_lang['packman.template'] = 'Template';
 $_lang['packman.template_add'] = 'Add Template';
 $_lang['packman.template_desc'] = 'The Template to package in.';

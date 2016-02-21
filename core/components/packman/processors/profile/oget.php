@@ -90,13 +90,5 @@ if (!empty($data['directories'])) {
     $profile->set('directories','(' . $modx->toJSON($tpls) . ')');
 }
 
-/* systemsettings */
-if (!empty($data['systemsettings'])) {
-    $tpls = array();
-    foreach ($data['systemsettings'] as $tpl) {
-        $tpls[] = $tpl;
-    }
-    $profile->set('systemsettings','(' . $modx->toJSON($tpls) . ')');
-}
 
 return $modx->error->success('',$profile);

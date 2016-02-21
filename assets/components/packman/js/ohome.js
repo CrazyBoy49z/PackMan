@@ -109,20 +109,6 @@ Ext.extend(TP.page.Home,MODx.Component,{
         Ext.getCmp('tp-grid-plugins').store.removeAll();
         Ext.getCmp('tp-grid-packages').store.removeAll();
         Ext.getCmp('tp-grid-directories').store.removeAll();
-		
-		// MJB clear CMP tab
-		var hmp = Ext.getCmp('tp-panel-home');
-		Ext.getCmp('tp-cmpmenu-include').setValue(0);
-		Ext.getCmp('tp-cmpmenu-name').setValue('');
-		Ext.getCmp('tp-cmpmenu-desc').setValue('');
-		Ext.getCmp('tp-cmpmenu-action').setValue('');
-		Ext.getCmp('tp-cmpmenu-params').setValue('');
-		// if rendered then reset tab fields
-		if (hmp.rendered) {
-			hmp.menuincludeFieldMsg({},false);
-		}
-		
-		Ext.getCmp('tp-grid-systemsettings').store.removeAll();
         TP.profileLoaded = 0;
 
         var b = Ext.getCmp('tp-menu-profile-options');
@@ -131,10 +117,6 @@ Ext.extend(TP.page.Home,MODx.Component,{
         if (rc) {
             Ext.getCmp('tp-combo-profile').reset();
         }
-					
-		// MJB - change to 1st tab
-		var tabs = Ext.getCmp('tp-home-tab');
-		tabs.setActiveTab( 0 );	
     }
 
 
@@ -147,19 +129,6 @@ Ext.extend(TP.page.Home,MODx.Component,{
         vs.plugins = Ext.getCmp('tp-grid-plugins').getData();
         vs.packages = Ext.getCmp('tp-grid-packages').getData();
         vs.directories = Ext.getCmp('tp-grid-directories').getData();
-		
-		// MJB - just save unselected keys
-		var arrayList=[];
-		var allrecs = Ext.getCmp('tp-grid-systemsettings').getStore().getRange();
-		Ext.each(allrecs, function (item) {
-			arrayList.push(item.data.key);                 
-		});
-		var srecs = Ext.getCmp('tp-grid-systemsettings').getSelectionModel().getSelections();
-		Ext.each(srecs, function (item) {
-			arrayList.splice( arrayList.indexOf(item.data.key), 1 );                  
-		});
-		vs.systemsettings = arrayList;
-		
         return Ext.util.JSON.encode(vs);
     }
     ,createProfile: function(cb) {
@@ -242,21 +211,6 @@ Ext.extend(TP.page.Home,MODx.Component,{
                         Ext.getCmp('tp-grid-directories').getStore().loadData(d);
                     }
 
-					if (r.object.systemsettings) {
-                        d = Ext.decode(r.object.systemsettings);
-                        var ssg = Ext.getCmp('tp-grid-systemsettings');
-						ssg.setuncheckedkeyval(d);
-						// if systemsettings rendered then update
-						if (ssg.rendered) {
-							ssg.changess();
-							Ext.getCmp('tp-sscategory-name').setValue(r.object.data.info.category);
-						}
-                    }
-					
-					// MJB - change to 1st tab
-					var tabs = Ext.getCmp('tp-home-tab');
-					tabs.setActiveTab( 0 );	
-					
                 },scope:this}
             }
         });

@@ -31,7 +31,6 @@ $modx->regClientStartupScript($tp->config['jsUrl'].'snippets.grid.js');
 $modx->regClientStartupScript($tp->config['jsUrl'].'plugins.grid.js');
 $modx->regClientStartupScript($tp->config['jsUrl'].'packages.grid.js');
 $modx->regClientStartupScript($tp->config['jsUrl'].'directories.grid.js');
-$modx->regClientStartupScript($tp->config['jsUrl'].'systemsettings.grid.js');
 $modx->regClientStartupScript($tp->config['jsUrl'].'home.panel.js');
 $modx->regClientStartupScript($tp->config['jsUrl'].'home.js');
 $output = '<div id="tp-panel-home-div"></div>';
