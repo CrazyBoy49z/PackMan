@@ -37,16 +37,16 @@ set_time_limit(0);
 /* version info */
 define('PKG_NAME','packman');
 define('PKG_NAME_LOWER','packman');
-define('PKG_VERSION','1.2.1');
+define('PKG_VERSION','1.3.0');
 define('PKG_RELEASE','pl');
 
 /* set sources */
 $root = dirname(dirname(__FILE__)).'/';
 $sources= array (
     'root' => $root,
-    'build' => $root .'_build/',
-    'resolvers' => $root . '_build/resolvers/',
-    'data' => $root . '_build/data/',
+    'build' => $root .'_build_packman/',
+    'resolvers' => $root . '_build_packman/resolvers/',
+    'data' => $root . '_build_packman/data/',
     'lexicon' => $root . 'core/components/packman/lexicon/',
     'source_core' => $root.'core/components/packman',
     'source_assets' => $root.'assets/components/packman',

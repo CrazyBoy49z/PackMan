@@ -2,7 +2,7 @@ Changelog for PackMan
 
 PackMan 1.3.0
 ====================================
-- Changes to EN lexicin for new tabs
+- Changes to EN lexicon for new tabs
 - Added CMP Menu tab
 - Added System Settings Tab
 - Added metadata.mysql to model
